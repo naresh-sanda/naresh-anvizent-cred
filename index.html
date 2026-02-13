@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Credentials Management Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .header h3 {
+      margin: 0;
+      font-weight: 300;
+      font-size: 24px;
+    }
+    
+    .header h3 strong {
+      font-weight: 600;
+    }
+    
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 64px;
+      width: 260px;
+      height: calc(100vh - 64px);
+      background: #2c3e50;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    
+    .sidebar-menu li {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .sidebar-menu li a {
+      display: block;
+      padding: 15px 25px;
+      color: #ecf0f1;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .sidebar-menu li a:hover {
+      background: #34495e;
+      padding-left: 30px;
+      color: #fff;
+    }
+    
+    .sidebar-menu li a.active {
+      background: #667eea;
+      border-left: 4px solid #fff;
+      padding-left: 21px;
+    }
+    
+    .sidebar-menu li a i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .content {
+      margin-left: 260px;
+      margin-top: 64px;
+      padding: 30px;
+      min-height: calc(100vh - 64px);
+    }
+    
+    .credential-card {
+      background: white;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: none;
+    }
+    
+    .credential-card.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .credential-card h4 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+      font-weight: 600;
+    }
+    
+    .table {
+      margin-bottom: 0;
+    }
+    
+    .table > tbody > tr > td {
+      border-color: #ecf0f1;
+      padding: 12px;
+    }
+    
+    .label-cell {
+      font-weight: 600;
+      color: #34495e;
+      background: #f8f9fa;
+      width: 25%;
+    }
+    
+    .value-cell {
+      color: #555;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+    }
+    
+    .welcome-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .welcome-card h2 {
+      margin: 0 0 10px 0;
+      font-weight: 300;
+    }
+    
+    .welcome-card p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+      
+      .content {
+        margin-left: 200px;
+      }
+      
+      .sidebar-menu li a {
+        padding: 12px 15px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h3><i class="fa fa-lock"></i> <strong>Naresh Kumar Sanda</strong> - DWP-680</h3>
+</div>
+
+<div class="sidebar">
+  <ul class="sidebar-menu">
+    <li><a href="#" onclick="showSection('welcome'); return false;" class="active"><i class="fa fa-home"></i> Dashboard</a></li>
+    <li><a href="#" onclick="showSection('anvizent_mail'); return false;"><i class="fa fa-envelope-o"></i> Anvizent Mail Outlook</a></li>
+    <li><a href="#" onclick="showSection('anydesk_remote'); return false;"><i class="fa fa-desktop"></i> AnyDesk Remote</a></li>
+    <li><a href="#" onclick="showSection('anvizent_vpn'); return false;"><i class="fa fa-lock"></i> Anvizent VPN</a></li>
+    <li><a href="#" onclick="showSection('anvizent_git_repo'); return false;"><i class="fa fa-github"></i> Anvizent Git</a></li>
+    <li><a href="#" onclick="showSection('anvizent_gmail'); return false;"><i class="fa fa-google"></i> Anvizent Gmail</a></li>
+	<li><a href="#" onclick="showSection('anvizent_laptop_cred'); return false;"><i class="fa fa-google"></i> Anvizent Laptop Cred</a></li>
+
+  </ul>
+</div>
+
+<div class="content">
+  <div id="welcome" class="credential-card active">
+    <div class="welcome-card">
+      <h2>Welcome to Credentials Management</h2>
+      <p>Select an item from the sidebar to view your credentials</p>
+    </div>
+  </div>
+
+
+
+
+  <div id="anvizent_mail" class="credential-card">
+    <h4><i class="fa fa-envelope-o"></i> Anvizent Mail Outlook Credentials</h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">Anvizent URL</td>
+        <td class="value-cell">http://mail.anvizent.com</td>
+      </tr>
+      <tr>
+        <td class="label-cell">UserName</td>
+        <td class="value-cell">naresh.sanda@anvizent.com</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Password</td>
+        <td class="value-cell">ksdRG2Bv@1V#1</td>
+      </tr>
+    </table>
+  </div>
+
+  
+
+
+  <div id="anydesk_remote" class="credential-card">
+    <h4><i class="fa fa-desktop"></i> AnyDesk Remote Credentials</h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">UserName</td>
+        <td class="value-cell">927889516</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Password</td>
+        <td class="value-cell">Anv!z@009</td>
+      </tr>
+      <tr>
+        <td class="label-cell">System Password</td>
+        <td class="value-cell">Krypt0n@009</td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="anvizent_vpn" class="credential-card">
+    <h4><i class="fa fa-lock"></i> Anvizent VPN Credentials</h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">UserName</td>
+        <td class="value-cell">naresh.s</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Password</td>
+        <td class="value-cell">Bl@nk$tCrypt!</td>
+      </tr>
+    </table>
+  </div>
+
+
+
+
+
+
+
+  <div id="anvizent_git_repo" class="credential-card">
+    <h4><i class="fa fa-github"></i> Anvizent Git Repository</h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">UserName</td>
+        <td class="value-cell">naresh-sanda</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Password</td>
+        <td class="value-cell">Naresh@7892</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Token</td>
+        <td class="value-cell">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</td>
+      </tr>
+      <tr>
+        <td class="label-cell">JetBrains Git</td>
+        <td class="value-cell">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</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Email</td>
+        <td class="value-cell">naresh.sanda@anvizent.com</td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="anvizent_gmail" class="credential-card">
+    <h4><i class="fa fa-google"></i> Anvizent Gmail Credentials</h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">UserName/Email</td>
+        <td class="value-cell">naresh.sanda@anvizent.com</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Password</td>
+        <td class="value-cell">Explore@09.!</td>
+      </tr>
+    </table>
+  </div>
+  
+  
+  
+  <div id="anvizent_laptop_cred" class="credential-card">
+    <h4><i class="fa fa-envelope-o"></i> Anvizent laptop Credentials </h4>
+    <table class="table table-bordered">
+      <tr>
+        <td class="label-cell">Anvizent LapNew</td>
+        <td class="value-cell">Explore@09</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Anvizent Lap Old</td>
+        <td class="value-cell">Anviz@123</td>
+      </tr>   
+    </table>
+  </div>
+
+</div>
+
+<script>
+function showSection(sectionId) {
+  // Hide all sections
+  var sections = document.querySelectorAll('.credential-card');
+  sections.forEach(function(section) {
+    section.classList.remove('active');
+  });
+  
+  // Remove active class from all menu items
+  var menuItems = document.querySelectorAll('.sidebar-menu li a');
+  menuItems.forEach(function(item) {
+    item.classList.remove('active');
+  });
+  
+  // Show selected section
+  document.getElementById(sectionId).classList.add('active');
+  
+  // Add active class to clicked menu item
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
